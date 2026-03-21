@@ -1,0 +1,8 @@
+name              = "firecats-worker"
+main              = "worker/index.js"
+compatibility_date = "2024-09-23"
+
+[[d1_databases]]
+binding       = "DB"
+database_name = "firecats-db"
+database_id   = "YOUR_DATABASE_ID_HERE"   # replace after: wrangler d1 create firecats-db

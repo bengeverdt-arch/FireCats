@@ -1,0 +1,350 @@
+/* ─── Reset & Variables ───────────────────────────────────────────────────── */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg:           #111111;
+  --surface:      #1c1c1c;
+  --surface-2:    #222222;
+  --border:       #2e2e2e;
+  --text:         #e8e8e8;
+  --text-muted:   #777777;
+  --accent:       #e85d04;
+  --accent-light: #f48c06;
+  --accent-glow:  rgba(232, 93, 4, 0.18);
+  --danger:       #c0392b;
+  --past-bg:      #161616;
+  --past-text:    #4a4a4a;
+  --radius:       8px;
+}
+
+/* ─── Base ───────────────────────────────────────────────────────────────── */
+
+body {
+  background:  var(--bg);
+  color:       var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size:   16px;
+  line-height: 1.5;
+  min-height:  100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Header ─────────────────────────────────────────────────────────────── */
+
+header {
+  background:    #0c0c0c;
+  border-bottom: 1px solid var(--border);
+  padding:       1rem 1.25rem;
+  position:      sticky;
+  top:           0;
+  z-index:       10;
+}
+
+.header-inner h1 {
+  font-size:      1.6rem;
+  font-weight:    800;
+  color:          var(--accent);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.season-label {
+  font-size:  0.8rem;
+  color:      var(--text-muted);
+  margin-top: 0.15rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ─── Main / Calendar Container ──────────────────────────────────────────── */
+
+main {
+  max-width: 840px;
+  margin:    0 auto;
+  padding:   1.25rem 1rem 4rem;
+}
+
+#calendar {
+  display:        flex;
+  flex-direction: column;
+  gap:            0.25rem;
+}
+
+/* ─── Month Header ───────────────────────────────────────────────────────── */
+
+.month-header {
+  font-size:      0.75rem;
+  font-weight:    700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color:          var(--accent-light);
+  padding:        1.25rem 0.25rem 0.5rem;
+  border-bottom:  1px solid var(--border);
+  margin-top:     0.5rem;
+}
+
+/* ─── Weekend Pair ───────────────────────────────────────────────────────── */
+
+.weekend-pair {
+  display:               grid;
+  grid-template-columns: 1fr 1fr;
+  gap:                   0.5rem;
+  margin-top:            0.5rem;
+}
+
+@media (max-width: 500px) {
+  .weekend-pair {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Day Tile ───────────────────────────────────────────────────────────── */
+
+.day-tile {
+  background:     var(--surface);
+  border:         1px solid var(--border);
+  border-radius:  var(--radius);
+  padding:        0.875rem;
+  display:        flex;
+  flex-direction: column;
+  gap:            0.6rem;
+  min-height:     130px;
+  transition:     border-color 0.2s;
+}
+
+.day-tile:not(.past):hover {
+  border-color: #3e3e3e;
+}
+
+.day-tile.past {
+  background: var(--past-bg);
+  opacity:    0.6;
+}
+
+/* Tile header row */
+.tile-header {
+  display:         flex;
+  justify-content: space-between;
+  align-items:     center;
+}
+
+.tile-day-name {
+  font-weight: 600;
+  font-size:   0.95rem;
+  color:       var(--text);
+}
+
+.tile-date-num {
+  font-size:     0.75rem;
+  color:         var(--text-muted);
+  background:    var(--surface-2);
+  border:        1px solid var(--border);
+  border-radius: 4px;
+  padding:       0.15rem 0.45rem;
+}
+
+/* ─── Name List ──────────────────────────────────────────────────────────── */
+
+.name-list {
+  flex:          1;
+  display:       flex;
+  flex-wrap:     wrap;
+  gap:           0.35rem;
+  align-content: flex-start;
+}
+
+.empty-msg {
+  font-size:   0.78rem;
+  color:       var(--text-muted);
+  font-style:  italic;
+  line-height: 1.4;
+}
+
+.name-tag {
+  background:    var(--accent-glow);
+  border:        1px solid var(--accent);
+  color:         var(--accent-light);
+  border-radius: 4px;
+  padding:       0.2rem 0.55rem;
+  font-size:     0.8rem;
+  font-weight:   500;
+  cursor:        pointer;
+  user-select:   none;
+  transition:    background 0.15s, color 0.15s;
+  white-space:   nowrap;
+}
+
+.name-tag:hover {
+  background: var(--accent);
+  color:      #fff;
+}
+
+.name-tag.past {
+  cursor:  default;
+  opacity: 0.55;
+}
+
+.name-tag.past:hover {
+  background: var(--accent-glow);
+  color:      var(--accent-light);
+}
+
+/* ─── Sign-Up Button ─────────────────────────────────────────────────────── */
+
+.signup-btn {
+  margin-top:    auto;
+  background:    none;
+  border:        1px dashed var(--border);
+  border-radius: 6px;
+  color:         var(--text-muted);
+  font-size:     0.8rem;
+  padding:       0.4rem 0.5rem;
+  cursor:        pointer;
+  width:         100%;
+  transition:    border-color 0.15s, color 0.15s;
+}
+
+.signup-btn:hover {
+  border-color: var(--accent);
+  color:        var(--accent);
+}
+
+/* ─── Modals ─────────────────────────────────────────────────────────────── */
+
+.modal-overlay {
+  display:         none;
+  position:        fixed;
+  inset:           0;
+  background:      rgba(0, 0, 0, 0.8);
+  z-index:         100;
+  align-items:     center;
+  justify-content: center;
+  padding:         1rem;
+}
+
+.modal-overlay.open {
+  display: flex;
+}
+
+.modal-box {
+  background:     var(--surface-2);
+  border:         1px solid var(--border);
+  border-radius:  12px;
+  padding:        1.5rem;
+  width:          100%;
+  max-width:      420px;
+  display:        flex;
+  flex-direction: column;
+  gap:            1rem;
+}
+
+.modal-box h2 {
+  font-size:   1rem;
+  font-weight: 600;
+  color:       var(--text);
+  line-height: 1.35;
+}
+
+.modal-box p {
+  font-size:   0.95rem;
+  color:       var(--text);
+  line-height: 1.45;
+}
+
+#name-input {
+  background:    var(--surface);
+  border:        1px solid var(--border);
+  border-radius: 6px;
+  color:         var(--text);
+  font-size:     1rem;
+  padding:       0.65rem 0.75rem;
+  width:         100%;
+  outline:       none;
+  transition:    border-color 0.15s;
+}
+
+#name-input:focus {
+  border-color: var(--accent);
+}
+
+#name-input::placeholder {
+  color: var(--text-muted);
+}
+
+.modal-error {
+  font-size:  0.8rem;
+  color:      #e74c3c;
+  min-height: 1rem;
+}
+
+.modal-actions {
+  display:         flex;
+  gap:             0.75rem;
+  justify-content: flex-end;
+}
+
+/* ─── Buttons ────────────────────────────────────────────────────────────── */
+
+.btn {
+  border:        none;
+  border-radius: 6px;
+  font-size:     0.9rem;
+  font-weight:   600;
+  padding:       0.5rem 1.25rem;
+  cursor:        pointer;
+  transition:    opacity 0.15s;
+  white-space:   nowrap;
+}
+
+.btn:hover { opacity: 0.85; }
+
+.btn-primary {
+  background: var(--accent);
+  color:      #fff;
+}
+
+.btn-secondary {
+  background: var(--surface);
+  border:     1px solid var(--border);
+  color:      var(--text-muted);
+}
+
+.btn-danger {
+  background: var(--danger);
+  color:      #fff;
+}
+
+/* ─── Toast ──────────────────────────────────────────────────────────────── */
+
+.toast {
+  position:   fixed;
+  bottom:     1.5rem;
+  left:       50%;
+  transform:  translateX(-50%) translateY(120px);
+  background: #2a2a2a;
+  color:      var(--text);
+  padding:    0.75rem 1.25rem;
+  border:     1px solid var(--border);
+  border-radius: 8px;
+  font-size:  0.88rem;
+  z-index:    200;
+  transition: transform 0.3s ease;
+  max-width:  90vw;
+  text-align: center;
+  pointer-events: none;
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast-error {
+  background:   #3a1414;
+  border-color: var(--danger);
+  color:        #ff7f7f;
+}

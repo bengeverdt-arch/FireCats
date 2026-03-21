@@ -1,0 +1,197 @@
+================================================================================
+PROJECT BRIEF: FireCats Crew Availability Calendar
+================================================================================
+Prepared for: Claude Code
+Project directory: C:\FireCats\
+Date: March 2026
+
+--------------------------------------------------------------------------------
+OVERVIEW
+--------------------------------------------------------------------------------
+
+Build a web-based crew availability calendar for a 16-person wildland fire crew
+in Eastern Kentucky. This replaces a Google Form that gets sent out weekly asking
+crew members which weekend days they can work. The goal is a single shared URL
+that the whole crew can visit, sign up for days they're available to work, and
+see who else has signed up. No login, no admin panel, no separate views — just
+one live collaborative sign-up sheet that everyone can read and edit.
+
+This is a STANDALONE project for now, but it must be built modularly so it can
+later be integrated as a module into a separate existing project called
+"Fire Radar" (EKY Fire Radar dashboard). Build with clean separation between
+frontend and backend so components can be lifted and dropped into another
+project with minimal rework.
+
+--------------------------------------------------------------------------------
+TECH STACK
+--------------------------------------------------------------------------------
+
+- Frontend: Plain HTML + CSS + vanilla JavaScript (no frameworks)
+- Backend: Cloudflare Worker (handles all API requests)
+- Database: Cloudflare D1 (SQLite-based, stores sign-up entries)
+- Hosting: Cloudflare Pages (static frontend deployment)
+- Deployment pattern: Cloudflare Pages via zip upload
+
+Do NOT use Firebase, Supabase, or any third-party database. Keep everything
+inside the Cloudflare ecosystem. The developer is already familiar with
+Cloudflare Pages zip upload deployments and Cloudflare Worker development.
+
+--------------------------------------------------------------------------------
+FILE STRUCTURE
+--------------------------------------------------------------------------------
+
+Organize the project so each concern is its own file. This is critical for
+future integration into the Fire Radar project. Suggested structure:
+
+C:\FireCats\
+├── frontend\
+│   ├── index.html          (main page shell)
+│   ├── calendar.js         (all calendar rendering and interaction logic)
+│   ├── api.js              (all fetch calls to the Worker backend)
+│   └── styles.css          (all styling)
+├── worker\
+│   ├── index.js            (Cloudflare Worker entry point, routes requests)
+│   ├── db.js               (all D1 database queries as exported functions)
+│   └── cors.js             (CORS headers helper)
+├── schema.sql              (D1 database schema, run once to initialize)
+├── wrangler.toml           (Cloudflare Worker config)
+└── README.md               (setup and deployment instructions)
+
+The Worker should use a clean routing pattern (e.g. switch on pathname) so
+new routes can be added later without touching existing logic.
+
+--------------------------------------------------------------------------------
+CORE FEATURE: THE CALENDAR
+--------------------------------------------------------------------------------
+
+The calendar shows only Saturdays and Sundays that fall within Kentucky's two
+wildland fire seasons:
+
+  Spring season: February 15 – April 30
+  Fall season:   October 1 – December 15
+
+Days outside these seasons are NOT shown at all. The calendar should display
+all upcoming fire season weekends from today forward through the end of the
+current or next active season. Past dates within the season should remain
+visible but be locked (cannot add or remove names).
+
+The calendar layout should be clean, scannable, and mobile-first. Each
+weekend should show Saturday and Sunday together as a pair. For each day,
+show the date and a list of crew member names who have signed up. A crew of
+up to 16 people might sign up for any given day, so the name list needs to
+be readable even when full.
+
+--------------------------------------------------------------------------------
+SIGN-UP INTERACTION
+--------------------------------------------------------------------------------
+
+Adding a name:
+- User clicks on a day (or a clearly labeled "Sign up" button on that day)
+- A simple modal or inline input appears asking for their name
+- They type their name and confirm
+- Their name appears on that day immediately (optimistic UI update, then
+  confirm with backend)
+
+Removing a name:
+- User clicks on any existing name in the list
+- A confirmation dialog appears: "Remove [Name] from [Day, Date]? Yes / Cancel"
+- On confirm, the name is removed
+- This is fully trust-based — anyone can remove any name. The confirmation
+  dialog is just to prevent accidental deletions.
+
+There is NO login, NO authentication, NO admin role. The entire system is
+honor-based. Keep the interaction as low-friction as possible. The crew
+members using this are field workers on phones, not office workers on desktops.
+
+--------------------------------------------------------------------------------
+DATA MODEL (D1 SCHEMA)
+--------------------------------------------------------------------------------
+
+One table is sufficient:
+
+  CREATE TABLE signups (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    date TEXT NOT NULL,          -- ISO format: YYYY-MM-DD (always a Sat or Sun)
+    name TEXT NOT NULL,
+    created_at TEXT DEFAULT (datetime('now'))
+  );
+
+No duplicate names per day — enforce this at the application level (check
+before inserting, show a friendly message if name already exists on that day).
+Case-insensitive duplicate check is fine (e.g. "Ben" and "ben" = same person).
+
+--------------------------------------------------------------------------------
+WORKER API ROUTES
+--------------------------------------------------------------------------------
+
+GET  /api/signups?date=YYYY-MM-DD    Returns all signups for a specific date
+GET  /api/signups/range?start=YYYY-MM-DD&end=YYYY-MM-DD   Returns all signups
+                                     within a date range (used on page load to
+                                     fetch the whole season at once)
+POST /api/signups                    Body: { date, name } — adds a signup
+DELETE /api/signups                  Body: { date, name } — removes a signup
+
+All responses should be JSON. Include proper CORS headers on all responses
+so the frontend (served from Pages) can talk to the Worker without issues.
+
+--------------------------------------------------------------------------------
+DESIGN GUIDELINES
+--------------------------------------------------------------------------------
+
+- Mobile-first. Most crew members will use this on their phone.
+- Dark theme preferred — this crew works outdoors and a dark UI is easier
+  on the eyes in bright conditions and at night.
+- Typography should be large and readable. Don't make people squint.
+- Color accent: use a fire/ember color palette — deep oranges and ambers on
+  a dark background work well thematically and visually.
+- Each weekend pair (Sat + Sun) should be visually grouped together.
+- Show the month and date clearly on each day tile.
+- Name lists on each day tile should be compact but readable.
+- Empty days should look inviting, not broken — something like "No one yet —
+  be the first!" or similar friendly placeholder.
+- Keep the UI simple. No charts, no graphs, no statistics. Just the calendar
+  and the names.
+
+--------------------------------------------------------------------------------
+README REQUIREMENTS
+--------------------------------------------------------------------------------
+
+The README.md must include:
+1. How to create the Cloudflare D1 database and run schema.sql
+2. How to configure wrangler.toml (D1 binding name, Worker name)
+3. How to deploy the Worker with `wrangler deploy`
+4. How to deploy the frontend to Cloudflare Pages (zip upload method)
+5. How to update the frontend's api.js with the live Worker URL after deploy
+6. Any environment variables or bindings needed
+
+The developer knows Cloudflare well but write the README clearly enough
+that someone else on the crew could follow it if needed.
+
+--------------------------------------------------------------------------------
+OUT OF SCOPE FOR THIS BUILD
+--------------------------------------------------------------------------------
+
+The following are planned for future integration into Fire Radar but should
+NOT be built now:
+- NWS fire weather briefing panel
+- RAWS weather data
+- Any user authentication
+- Email or push notifications
+- Admin dashboard or data export
+
+Focus only on the calendar sign-up system described above.
+
+--------------------------------------------------------------------------------
+FINAL NOTES
+--------------------------------------------------------------------------------
+
+- Prioritize simplicity and reliability over cleverness.
+- When in doubt, do less and do it well.
+- The crew using this ranges from tech-savvy to not at all — design for the
+  least tech-savvy person on the crew.
+- This will likely be accessed on cell networks in rural Eastern Kentucky,
+  so keep page weight low and avoid heavy dependencies.
+
+================================================================================
+END OF BRIEF
+================================================================================
