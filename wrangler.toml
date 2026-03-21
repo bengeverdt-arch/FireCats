@@ -5,4 +5,4 @@ compatibility_date = "2024-09-23"
 [[d1_databases]]
 binding       = "DB"
 database_name = "firecats-db"
-database_id   = "YOUR_DATABASE_ID_HERE"   # replace after: wrangler d1 create firecats-db
+database_id   = "f50c1332-e132-4d2d-9adf-1e5501db9676"

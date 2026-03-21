@@ -5,7 +5,7 @@
  * WORKER_URL below with your live Worker URL. It will look like:
  *   https://firecats-worker.<your-subdomain>.workers.dev
  */
-const WORKER_URL = 'https://firecats-worker.YOUR-SUBDOMAIN.workers.dev';
+const WORKER_URL = 'https://firecats-worker.bengeverdt.workers.dev';
 
 export async function fetchSignupsForRange(start, end) {
   const res = await fetch(`${WORKER_URL}/api/signups/range?start=${start}&end=${end}`);
