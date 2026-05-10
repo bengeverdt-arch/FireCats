@@ -37,12 +37,11 @@ body {
 /* ─── Header ─────────────────────────────────────────────────────────────── */
 
 header {
-  background:    #0c0c0c;
-  border-bottom: 1px solid var(--border);
-  padding:       1rem 1.25rem;
-  position:      sticky;
-  top:           0;
-  z-index:       10;
+  background: #0c0c0c;
+  padding:    1rem 1.25rem 0;
+  position:   sticky;
+  top:        0;
+  z-index:    10;
 }
 
 .header-inner h1 {
@@ -348,3 +347,247 @@ main {
   border-color: var(--danger);
   color:        #ff7f7f;
 }
+
+/* ─── Tab Nav ────────────────────────────────────────────────────────────── */
+
+.tab-nav {
+  display:    flex;
+  gap:        0;
+  margin-top: 0.75rem;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.tab-nav::-webkit-scrollbar { display: none; }
+
+.tab-btn {
+  background:     none;
+  border:         none;
+  border-bottom:  2px solid transparent;
+  color:          var(--text-muted);
+  cursor:         pointer;
+  font-size:      0.82rem;
+  font-weight:    600;
+  letter-spacing: 0.05em;
+  padding:        0.5rem 1rem 0.55rem;
+  text-transform: uppercase;
+  transition:     color 0.15s, border-color 0.15s;
+  white-space:    nowrap;
+  margin-bottom:  -1px;
+}
+
+.tab-btn:hover { color: var(--text); }
+
+.tab-btn.active {
+  color:             var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* ─── Tab Panels ─────────────────────────────────────────────────────────── */
+
+.tab-panel         { display: none; }
+.tab-panel.active  { display: block; }
+
+/* ─── Section Header ─────────────────────────────────────────────────────── */
+
+.section-header {
+  padding: 1.5rem 0 1rem;
+}
+
+.section-header h2 {
+  font-size:      1rem;
+  font-weight:    700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color:          var(--text);
+}
+
+.section-sub {
+  font-size:  0.82rem;
+  color:      var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+/* ─── Info Grid (New Hire) ───────────────────────────────────────────────── */
+
+.info-grid {
+  display:               grid;
+  grid-template-columns: 1fr 1fr;
+  gap:                   0.75rem;
+}
+
+@media (max-width: 600px) {
+  .info-grid { grid-template-columns: 1fr; }
+}
+
+.info-card {
+  background:     var(--surface);
+  border:         1px solid var(--border);
+  border-radius:  var(--radius);
+  padding:        1rem 1.1rem;
+  display:        flex;
+  flex-direction: column;
+  gap:            0.6rem;
+}
+
+.info-card h3 {
+  font-size:      0.78rem;
+  font-weight:    700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color:          var(--accent-light);
+}
+
+.info-card p {
+  font-size:   0.88rem;
+  color:       var(--text);
+  line-height: 1.5;
+}
+
+.info-list {
+  list-style:     none;
+  display:        flex;
+  flex-direction: column;
+  gap:            0.35rem;
+}
+
+.info-list li {
+  font-size:   0.88rem;
+  color:       var(--text);
+  padding-left: 1rem;
+  position:    relative;
+  line-height: 1.4;
+}
+
+.info-list li::before {
+  content:  '›';
+  position: absolute;
+  left:     0;
+  color:    var(--accent);
+}
+
+.card-note {
+  font-size:   0.75rem !important;
+  color:       var(--text-muted) !important;
+  font-style:  italic;
+  border-top:  1px solid var(--border);
+  padding-top: 0.5rem;
+  margin-top:  auto !important;
+}
+
+/* ─── Link Cards (Resources) ─────────────────────────────────────────────── */
+
+.link-group {
+  margin-bottom: 1.5rem;
+}
+
+.link-group-label {
+  font-size:      0.72rem;
+  font-weight:    700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color:          var(--accent-light);
+  margin-bottom:  0.5rem;
+}
+
+.link-cards {
+  display:        flex;
+  flex-direction: column;
+  gap:            0.5rem;
+}
+
+.link-card {
+  background:     var(--surface);
+  border:         1px solid var(--border);
+  border-radius:  var(--radius);
+  padding:        0.85rem 1rem;
+  display:        flex;
+  flex-direction: column;
+  gap:            0.2rem;
+  text-decoration: none;
+  transition:     border-color 0.15s;
+}
+
+a.link-card { cursor: pointer; }
+a.link-card:hover { border-color: var(--accent); }
+
+.link-title {
+  font-size:   0.9rem;
+  font-weight: 600;
+  color:       var(--text);
+}
+
+.link-desc {
+  font-size: 0.8rem;
+  color:     var(--text-muted);
+}
+
+.placeholder-card { opacity: 0.55; }
+
+/* ─── Admin PIN ──────────────────────────────────────────────────────────── */
+
+#pin-wall {
+  display:         flex;
+  justify-content: center;
+  padding:         3rem 1rem;
+}
+
+.pin-box {
+  background:     var(--surface-2);
+  border:         1px solid var(--border);
+  border-radius:  12px;
+  padding:        2rem;
+  width:          100%;
+  max-width:      300px;
+  display:        flex;
+  flex-direction: column;
+  gap:            1rem;
+  text-align:     center;
+}
+
+.pin-box h2 {
+  font-size:      0.9rem;
+  font-weight:    700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color:          var(--text);
+}
+
+.pin-box > p {
+  font-size: 0.85rem;
+  color:     var(--text-muted);
+}
+
+#pin-input {
+  background:     var(--surface);
+  border:         1px solid var(--border);
+  border-radius:  6px;
+  color:          var(--text);
+  font-size:      1.3rem;
+  letter-spacing: 0.35em;
+  padding:        0.6rem 0.75rem;
+  text-align:     center;
+  width:          100%;
+  outline:        none;
+  transition:     border-color 0.15s;
+}
+
+#pin-input:focus         { border-color: var(--accent); }
+#pin-input::placeholder  { letter-spacing: normal; color: var(--text-muted); }
+
+.pin-error {
+  font-size:  0.8rem;
+  color:      #e74c3c;
+  min-height: 1rem;
+}
+
+/* ─── Admin Content ──────────────────────────────────────────────────────── */
+
+.coming-soon {
+  border-style: dashed;
+  opacity:      0.65;
+}
+
+.coming-soon p { font-style: italic; color: var(--text-muted); }
