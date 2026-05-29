@@ -77,7 +77,7 @@ main {
   top:            50%;
   left:           50%;
   transform:      translate(-50%, -50%);
-  width:          min(90vw, 780px);
+  width:          min(90vw, 975px);
   opacity:        0.12;
   pointer-events: none;
   user-select:    none;
