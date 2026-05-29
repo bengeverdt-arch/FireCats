@@ -51,8 +51,8 @@ header {
 }
 
 .crew-logo {
-  height:        48px;
-  width:         48px;
+  height:        96px;
+  width:         96px;
   object-fit:    contain;
   border-radius: 6px;
   flex-shrink:   0;
