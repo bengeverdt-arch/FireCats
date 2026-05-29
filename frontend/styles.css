@@ -488,6 +488,11 @@ main {
   letter-spacing: 0.04em;
 }
 
+.boot-examples-label {
+  font-size:  0.82rem !important;
+  color:      var(--text-muted) !important;
+}
+
 .boot-images {
   display:   flex;
   flex-wrap: wrap;
