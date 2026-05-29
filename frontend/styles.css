@@ -477,6 +477,36 @@ main {
   margin-top:  auto !important;
 }
 
+.info-card--wide {
+  grid-column: 1 / -1;
+}
+
+.boot-warning {
+  font-size:      0.85rem !important;
+  font-weight:    800 !important;
+  color:          var(--accent) !important;
+  letter-spacing: 0.04em;
+}
+
+.boot-images {
+  display:   flex;
+  flex-wrap: wrap;
+  gap:       0.5rem;
+  margin-top: 0.25rem;
+}
+
+.boot-images img {
+  width:         calc(50% - 0.25rem);
+  border-radius: var(--radius);
+  border:        1px solid var(--border);
+  object-fit:    cover;
+  aspect-ratio:  4 / 3;
+}
+
+@media (max-width: 500px) {
+  .boot-images img { width: 100%; }
+}
+
 /* ─── Link Cards (Resources) ─────────────────────────────────────────────── */
 
 .link-group {
