@@ -88,7 +88,7 @@ main {
 
 .calendar-watermark {
   position:       fixed;
-  top:            calc(50% + 2.5rem);
+  top:            calc(50% + 5rem);
   left:           50%;
   transform:      translate(-50%, -50%);
   width:          min(90vw, 650px);
