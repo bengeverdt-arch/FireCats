@@ -652,6 +652,12 @@ a.link-card:hover { border-color: var(--accent); }
 
 /* ─── Admin Content ──────────────────────────────────────────────────────── */
 
+.meetup-link {
+  display:     inline-block;
+  align-self:  flex-start;
+  text-decoration: none;
+}
+
 .coming-soon {
   border-style: dashed;
   opacity:      0.65;
