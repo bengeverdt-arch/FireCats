@@ -593,6 +593,120 @@ a.link-card:hover { border-color: var(--accent); }
 
 .placeholder-card { opacity: 0.55; }
 
+/* ─── Admin Chart ────────────────────────────────────────────────────────── */
+
+.admin-card {
+  background:    var(--surface);
+  border:        1px solid var(--border);
+  border-radius: var(--radius);
+  padding:       1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.admin-card h3 {
+  font-size:      0.78rem;
+  font-weight:    700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color:          var(--accent-light);
+  margin-bottom:  1rem;
+}
+
+.chart-season-label {
+  font-size:      0.72rem;
+  font-weight:    700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color:          var(--text-muted);
+  margin-bottom:  0.75rem;
+}
+
+.roster-row {
+  display:       flex;
+  align-items:   center;
+  gap:           0.6rem;
+  margin-bottom: 0.45rem;
+}
+
+.roster-name {
+  width:       180px;
+  flex-shrink: 0;
+  font-size:   0.83rem;
+  color:       var(--text);
+  display:     flex;
+  align-items: center;
+  gap:         0.4rem;
+  flex-wrap:   wrap;
+}
+
+.weekend-badge {
+  font-size:      0.62rem;
+  font-weight:    700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background:     var(--accent-glow);
+  border:         1px solid var(--accent);
+  color:          var(--accent);
+  border-radius:  3px;
+  padding:        0.1rem 0.35rem;
+  white-space:    nowrap;
+}
+
+.roster-bar-track {
+  flex:          1;
+  background:    var(--surface-2);
+  border:        1px solid var(--border);
+  border-radius: 4px;
+  height:        16px;
+  overflow:      hidden;
+}
+
+.roster-bar-fill {
+  height:     100%;
+  background: var(--accent);
+  transition: width 0.4s ease;
+}
+
+.roster-count {
+  width:       2rem;
+  font-size:   0.83rem;
+  font-weight: 600;
+  color:       var(--text-muted);
+  text-align:  right;
+  flex-shrink: 0;
+}
+
+.unmatched-section {
+  margin-top:  1rem;
+  padding-top: 0.75rem;
+  border-top:  1px solid var(--border);
+}
+
+.unmatched-label {
+  font-size:     0.75rem;
+  color:         var(--text-muted);
+  font-style:    italic;
+  margin-bottom: 0.4rem;
+}
+
+.unmatched-tag {
+  display:       inline-block;
+  background:    rgba(192, 57, 43, 0.15);
+  border:        1px solid var(--danger);
+  color:         #ff7f7f;
+  border-radius: 4px;
+  padding:       0.2rem 0.55rem;
+  font-size:     0.8rem;
+  margin:        0.2rem 0.2rem 0 0;
+}
+
+.chart-loading { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+.chart-error   { font-size: 0.85rem; color: #ff7f7f; }
+
+@media (max-width: 500px) {
+  .roster-name { width: 130px; font-size: 0.78rem; }
+}
+
 /* ─── Admin PIN ──────────────────────────────────────────────────────────── */
 
 #pin-wall {
