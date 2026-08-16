@@ -18,6 +18,10 @@ const ROSTER = [
   'Placeholder Fourteen',
   'Placeholder Fifteen',
   'Placeholder Sixteen',
+  'Placeholder Seventeen',
+  'Placeholder Eighteen',
+  'Placeholder Nineteen',
+  'Placeholder Twenty',
 ];
 
 // ─── Season / Date Helpers ────────────────────────────────────────────────────
