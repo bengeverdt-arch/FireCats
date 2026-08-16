@@ -799,3 +799,66 @@ a.link-card:hover { border-color: var(--accent); }
 }
 
 .coming-soon p { font-style: italic; color: var(--text-muted); }
+
+/* ─── Gear Inventory ─────────────────────────────────────────────────────── */
+
+#gear-grid-wrap {
+  overflow-x: auto;
+}
+
+.gear-table {
+  border-collapse: collapse;
+  width:           100%;
+  min-width:       900px;
+}
+
+.gear-table th,
+.gear-table td {
+  padding:      0.4rem 0.5rem;
+  border-bottom: 1px solid var(--border);
+  text-align:   center;
+  white-space:  nowrap;
+}
+
+.gear-table th {
+  font-size:      0.68rem;
+  font-weight:    700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color:          var(--text-muted);
+}
+
+.gear-name-col {
+  text-align:  left;
+  font-size:   0.83rem;
+  color:       var(--text);
+  position:    sticky;
+  left:        0;
+  background:  var(--surface);
+}
+
+.gear-table input[type="checkbox"] {
+  width:  16px;
+  height: 16px;
+  accent-color: var(--accent);
+}
+
+.gear-size-input {
+  width:         3.5rem;
+  margin-top:    0.3rem;
+  background:    var(--surface-2);
+  border:        1px solid var(--border);
+  border-radius: 4px;
+  color:         var(--text);
+  font-size:     0.75rem;
+  padding:       0.2rem 0.3rem;
+  text-align:    center;
+}
+
+.gear-status {
+  font-size:  0.75rem;
+  color:      var(--text-muted);
+  font-style: italic;
+  min-height: 1rem;
+  margin-top: 0.5rem;
+}

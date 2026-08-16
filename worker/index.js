@@ -1,5 +1,5 @@
 import { jsonResponse, corsPreflightResponse } from './cors.js';
-import { getSignupsByDate, getSignupsByRange, addSignup, removeSignup } from './db.js';
+import { getSignupsByDate, getSignupsByRange, addSignup, removeSignup, getAllGear, upsertGear } from './db.js';
 
 export default {
   async fetch(request, env) {
@@ -46,6 +46,27 @@ export default {
             const { date, name } = body;
             if (!date || !name) return jsonResponse({ error: 'Missing date or name.' }, 400);
             const result = await removeSignup(env.DB, date, name);
+            return jsonResponse(result);
+          }
+
+          default:
+            return jsonResponse({ error: 'Method not allowed.' }, 405);
+        }
+      }
+
+      // /api/gear — GET, PUT
+      if (pathname === '/api/gear') {
+        switch (method) {
+          case 'GET': {
+            const data = await getAllGear(env.DB);
+            return jsonResponse(data);
+          }
+
+          case 'PUT': {
+            const body = await request.json();
+            const { name, ...fields } = body;
+            if (!name) return jsonResponse({ error: 'Missing name.' }, 400);
+            const result = await upsertGear(env.DB, name.trim(), fields);
             return jsonResponse(result);
           }
 

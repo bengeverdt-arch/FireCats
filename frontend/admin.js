@@ -24,6 +24,20 @@ const ROSTER = [
   'Placeholder Twenty',
 ];
 
+const GEAR_ITEMS = [
+  { key: 'pack',         label: 'Pack' },
+  { key: 'fire_shelter', label: 'Fire Shelter' },
+  { key: 'side_pockets', label: 'Side Pockets' },
+  { key: 'gloves',       label: 'Gloves' },
+  { key: 'hard_hat',     label: 'Hard Hat' },
+  { key: 'eye_pro',      label: 'Eye Pro' },
+  { key: 'ear_pro',      label: 'Ear Pro' },
+  { key: 'headlamp',     label: 'Headlamp' },
+  { key: 'duffle_bag',   label: 'Duffle Bag', sizeField: 'duffle_number', sizePlaceholder: '#' },
+  { key: 'greens',       label: 'Greens',     sizeField: 'greens_size',   sizePlaceholder: 'Size' },
+  { key: 'yellow',       label: 'Yellow',     sizeField: 'yellow_size',   sizePlaceholder: 'Size' },
+];
+
 // ─── Season / Date Helpers ────────────────────────────────────────────────────
 
 function getActiveSeason() {
@@ -187,6 +201,129 @@ async function loadRosterStats() {
   }
 }
 
+// ─── Gear Inventory ─────────────────────────────────────────────────────────
+
+let gearState = {};
+const gearSaveTimers = {};
+
+function defaultGearRow() {
+  const row = {};
+  GEAR_ITEMS.forEach(item => {
+    row[item.key] = false;
+    if (item.sizeField) row[item.sizeField] = '';
+  });
+  return row;
+}
+
+function renderGearTable() {
+  const table = document.getElementById('gear-table');
+  if (!table) return;
+  table.innerHTML = '';
+
+  const thead   = document.createElement('thead');
+  const headRow = document.createElement('tr');
+  const nameTh  = document.createElement('th');
+  nameTh.className = 'gear-name-col';
+  nameTh.textContent = 'Name';
+  headRow.appendChild(nameTh);
+  GEAR_ITEMS.forEach(item => {
+    const th = document.createElement('th');
+    th.textContent = item.label;
+    headRow.appendChild(th);
+  });
+  thead.appendChild(headRow);
+  table.appendChild(thead);
+
+  const tbody = document.createElement('tbody');
+  ROSTER.forEach(name => {
+    const tr     = document.createElement('tr');
+    const nameTd = document.createElement('td');
+    nameTd.className   = 'gear-name-col';
+    nameTd.textContent = name;
+    tr.appendChild(nameTd);
+
+    GEAR_ITEMS.forEach(item => {
+      const td       = document.createElement('td');
+      const checkbox = document.createElement('input');
+      checkbox.type    = 'checkbox';
+      checkbox.checked = !!gearState[name][item.key];
+      checkbox.addEventListener('change', () => {
+        gearState[name][item.key] = checkbox.checked;
+        saveGearRow(name);
+      });
+      td.appendChild(checkbox);
+
+      if (item.sizeField) {
+        const sizeInput = document.createElement('input');
+        sizeInput.type        = 'text';
+        sizeInput.className   = 'gear-size-input';
+        sizeInput.placeholder = item.sizePlaceholder || '';
+        sizeInput.value       = gearState[name][item.sizeField] || '';
+        sizeInput.addEventListener('change', () => {
+          gearState[name][item.sizeField] = sizeInput.value.trim();
+          saveGearRow(name);
+        });
+        td.appendChild(sizeInput);
+      }
+
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+}
+
+function saveGearRow(name) {
+  const status = document.getElementById('gear-status');
+  status.textContent = 'Saving…';
+
+  clearTimeout(gearSaveTimers[name]);
+  gearSaveTimers[name] = setTimeout(async () => {
+    try {
+      const res = await fetch(`${WORKER_URL}/api/gear`, {
+        method:  'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ name, ...gearState[name] }),
+      });
+      if (!res.ok) throw new Error();
+      status.textContent = 'Saved.';
+      setTimeout(() => {
+        if (status.textContent === 'Saved.') status.textContent = '';
+      }, 1500);
+    } catch {
+      status.textContent = 'Save failed — check connection.';
+    }
+  }, 400);
+}
+
+async function loadGear() {
+  const status = document.getElementById('gear-status');
+  status.textContent = 'Loading…';
+
+  gearState = {};
+  ROSTER.forEach(name => { gearState[name] = defaultGearRow(); });
+
+  try {
+    const res = await fetch(`${WORKER_URL}/api/gear`);
+    if (!res.ok) throw new Error();
+    const rows = await res.json();
+
+    rows.forEach(row => {
+      if (!gearState[row.name]) return;
+      GEAR_ITEMS.forEach(item => {
+        gearState[row.name][item.key] = !!row[item.key];
+        if (item.sizeField) gearState[row.name][item.sizeField] = row[item.sizeField] || '';
+      });
+    });
+
+    renderGearTable();
+    status.textContent = '';
+  } catch {
+    status.textContent = 'Could not load gear inventory.';
+  }
+}
+
 // ─── Init ─────────────────────────────────────────────────────────────────────
 
 function initAdmin() {
@@ -201,6 +338,7 @@ function initAdmin() {
       adminContent.hidden  = false;
       pinError.textContent = '';
       loadRosterStats();
+      loadGear();
     } else {
       pinError.textContent = 'Incorrect PIN.';
       pinInput.value       = '';
