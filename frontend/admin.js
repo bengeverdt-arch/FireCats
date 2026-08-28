@@ -24,29 +24,6 @@ const ROSTER = [
   'Josh Collins',
 ];
 
-const EMAILS = {
-  'Reiley Conover':    'Reiley.Conover@uky.edu',
-  'Ben Geverdt':       'Benjamin.Geverdt@uky.edu',
-  'Kelty Hood':        'keltyhood@uky.edu',
-  'Nathan Hooks':      'Nathan.Hooks@uky.edu',
-  'Isabella Johnson':  'Isabella.Johnson14@uky.edu',
-  'Abigail Gaw':       'anga248@uky.edu',
-  'Kendall McGarvey':  'Kendall.McGarvey@uky.edu',
-  'Seth Boyken':       'Asbo238@uky.edu',
-  'Ben Falk':          'Ben.Falk@uky.edu',
-  'Arthur Gneuhs':     'Arthur.Gneuhs@uky.edu',
-  'Jared Fry':         'Jared.Fry@uky.edu',
-  'Tyler Rumble':      'tjru229@uky.edu',
-  'Will Coning':       'wco241@uky.edu',
-  'Andrew Lentscher':  'Andrew.Lentscher@uky.edu',
-  'Zahra Piltan':      'zspi223@uky.edu',
-  'Jacob Ball':        'jcba281@uky.edu',
-  'Aiden Gross':       'aiden.gross@uky.edu',
-  'Zachary Kern':      'kernzacharye@uky.edu',
-  'Kolton Zimmerman':  'bkzi222@uky.edu',
-  'Josh Collins':      'j.collins@uky.edu',
-};
-
 const GEAR_ITEMS = [
   { key: 'pack',         label: 'Pack' },
   { key: 'fire_shelter', label: 'Fire Shelter' },
@@ -347,16 +324,6 @@ async function loadGear() {
   }
 }
 
-// ─── Emails ───────────────────────────────────────────────────────────────────
-
-function renderEmails() {
-  const list = document.getElementById('email-list');
-  if (!list) return;
-  list.innerHTML = ROSTER.map(
-    name => `<li><span>${name}</span><a href="mailto:${EMAILS[name] || ''}">${EMAILS[name] || '—'}</a></li>`
-  ).join('');
-}
-
 // ─── Init ─────────────────────────────────────────────────────────────────────
 
 function initAdmin() {
@@ -372,7 +339,6 @@ function initAdmin() {
       pinError.textContent = '';
       loadRosterStats();
       loadGear();
-      renderEmails();
     } else {
       pinError.textContent = 'Incorrect PIN.';
       pinInput.value       = '';
