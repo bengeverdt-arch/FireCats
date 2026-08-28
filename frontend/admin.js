@@ -1,4 +1,4 @@
-const ADMIN_PIN  = '1234';
+const ADMIN_PIN  = '2224';
 const WORKER_URL = 'https://firecats-worker.bengeverdt.workers.dev';
 
 const ROSTER = [
