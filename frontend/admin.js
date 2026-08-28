@@ -2,27 +2,50 @@ const ADMIN_PIN  = '1234';
 const WORKER_URL = 'https://firecats-worker.bengeverdt.workers.dev';
 
 const ROSTER = [
+  'Reiley Conover',
   'Ben Geverdt',
-  'Placeholder Two',
-  'Placeholder Three',
-  'Placeholder Four',
-  'Placeholder Five',
-  'Placeholder Six',
-  'Placeholder Seven',
-  'Placeholder Eight',
-  'Placeholder Nine',
-  'Placeholder Ten',
-  'Placeholder Eleven',
-  'Placeholder Twelve',
-  'Placeholder Thirteen',
-  'Placeholder Fourteen',
-  'Placeholder Fifteen',
-  'Placeholder Sixteen',
-  'Placeholder Seventeen',
-  'Placeholder Eighteen',
-  'Placeholder Nineteen',
-  'Placeholder Twenty',
+  'Kelty Hood',
+  'Nathan Hooks',
+  'Isabella Johnson',
+  'Abigail Gaw',
+  'Kendall McGarvey',
+  'Seth Boyken',
+  'Ben Falk',
+  'Arthur Gneuhs',
+  'Jared Fry',
+  'Tyler Rumble',
+  'Will Coning',
+  'Andrew Lentscher',
+  'Zahra Piltan',
+  'Jacob Ball',
+  'Aiden Gross',
+  'Zachary Kern',
+  'Kolton Zimmerman',
+  'Josh Collins',
 ];
+
+const EMAILS = {
+  'Reiley Conover':    'Reiley.Conover@uky.edu',
+  'Ben Geverdt':       'Benjamin.Geverdt@uky.edu',
+  'Kelty Hood':        'keltyhood@uky.edu',
+  'Nathan Hooks':      'Nathan.Hooks@uky.edu',
+  'Isabella Johnson':  'Isabella.Johnson14@uky.edu',
+  'Abigail Gaw':       'anga248@uky.edu',
+  'Kendall McGarvey':  'Kendall.McGarvey@uky.edu',
+  'Seth Boyken':       'Asbo238@uky.edu',
+  'Ben Falk':          'Ben.Falk@uky.edu',
+  'Arthur Gneuhs':     'Arthur.Gneuhs@uky.edu',
+  'Jared Fry':         'Jared.Fry@uky.edu',
+  'Tyler Rumble':      'tjru229@uky.edu',
+  'Will Coning':       'wco241@uky.edu',
+  'Andrew Lentscher':  'Andrew.Lentscher@uky.edu',
+  'Zahra Piltan':      'zspi223@uky.edu',
+  'Jacob Ball':        'jcba281@uky.edu',
+  'Aiden Gross':       'aiden.gross@uky.edu',
+  'Zachary Kern':      'kernzacharye@uky.edu',
+  'Kolton Zimmerman':  'bkzi222@uky.edu',
+  'Josh Collins':      'j.collins@uky.edu',
+};
 
 const GEAR_ITEMS = [
   { key: 'pack',         label: 'Pack' },
@@ -324,6 +347,16 @@ async function loadGear() {
   }
 }
 
+// ─── Emails ───────────────────────────────────────────────────────────────────
+
+function renderEmails() {
+  const list = document.getElementById('email-list');
+  if (!list) return;
+  list.innerHTML = ROSTER.map(
+    name => `<li><span>${name}</span><a href="mailto:${EMAILS[name] || ''}">${EMAILS[name] || '—'}</a></li>`
+  ).join('');
+}
+
 // ─── Init ─────────────────────────────────────────────────────────────────────
 
 function initAdmin() {
@@ -339,6 +372,7 @@ function initAdmin() {
       pinError.textContent = '';
       loadRosterStats();
       loadGear();
+      renderEmails();
     } else {
       pinError.textContent = 'Incorrect PIN.';
       pinInput.value       = '';

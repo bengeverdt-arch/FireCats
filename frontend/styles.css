@@ -633,6 +633,42 @@ a.link-card:hover { border-color: var(--accent); }
   margin-bottom:  1rem;
 }
 
+.email-card summary {
+  font-size:      0.78rem;
+  font-weight:    700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color:          var(--accent-light);
+  cursor:         pointer;
+}
+
+.email-card[open] summary {
+  margin-bottom: 0.75rem;
+}
+
+.email-list {
+  list-style: none;
+  padding:    0;
+  margin:     0;
+  font-size:  0.85rem;
+}
+
+.email-list li {
+  display:     flex;
+  justify-content: space-between;
+  gap:         1rem;
+  padding:     0.4rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.email-list li:last-child {
+  border-bottom: none;
+}
+
+.email-list a {
+  color: var(--accent-light);
+}
+
 .chart-season-label {
   font-size:      0.72rem;
   font-weight:    700;
