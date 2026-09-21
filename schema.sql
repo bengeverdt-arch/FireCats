@@ -29,5 +29,7 @@ CREATE TABLE IF NOT EXISTS gear_inventory (
   greens_size    TEXT    NOT NULL DEFAULT '',
   yellow         INTEGER NOT NULL DEFAULT 0,
   yellow_size    TEXT    NOT NULL DEFAULT '',
+  boots          INTEGER NOT NULL DEFAULT 0,
+  boots_size     TEXT    NOT NULL DEFAULT '',
   updated_at     TEXT    DEFAULT (datetime('now'))
 );

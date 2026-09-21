@@ -60,9 +60,9 @@ export async function removeSignup(db, date, name) {
 
 const GEAR_BOOL_FIELDS = [
   'pack', 'fire_shelter', 'side_pockets', 'gloves', 'hard_hat',
-  'eye_pro', 'ear_pro', 'headlamp', 'duffle_bag', 'greens', 'yellow',
+  'eye_pro', 'ear_pro', 'headlamp', 'duffle_bag', 'greens', 'yellow', 'boots',
 ];
-const GEAR_TEXT_FIELDS = ['duffle_number', 'greens_size', 'yellow_size'];
+const GEAR_TEXT_FIELDS = ['duffle_number', 'greens_size', 'yellow_size', 'boots_size'];
 
 export async function getAllGear(db) {
   const result = await db.prepare('SELECT * FROM gear_inventory').all();
@@ -77,8 +77,8 @@ export async function upsertGear(db, name, fields) {
     .prepare(
       `INSERT INTO gear_inventory
          (name, pack, fire_shelter, side_pockets, gloves, hard_hat, eye_pro, ear_pro, headlamp,
-          duffle_bag, duffle_number, greens, greens_size, yellow, yellow_size, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
+          duffle_bag, duffle_number, greens, greens_size, yellow, yellow_size, boots, boots_size, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
        ON CONFLICT(name) DO UPDATE SET
          pack=excluded.pack, fire_shelter=excluded.fire_shelter, side_pockets=excluded.side_pockets,
          gloves=excluded.gloves, hard_hat=excluded.hard_hat, eye_pro=excluded.eye_pro,
@@ -86,12 +86,13 @@ export async function upsertGear(db, name, fields) {
          duffle_bag=excluded.duffle_bag, duffle_number=excluded.duffle_number,
          greens=excluded.greens, greens_size=excluded.greens_size,
          yellow=excluded.yellow, yellow_size=excluded.yellow_size,
+         boots=excluded.boots, boots_size=excluded.boots_size,
          updated_at=datetime('now')`
     )
     .bind(
       name,
       bools[0], bools[1], bools[2], bools[3], bools[4], bools[5], bools[6], bools[7],
-      bools[8], texts[0], bools[9], texts[1], bools[10], texts[2]
+      bools[8], texts[0], bools[9], texts[1], bools[10], texts[2], bools[11], texts[3]
     )
     .run();
 

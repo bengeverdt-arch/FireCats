@@ -37,6 +37,7 @@ const GEAR_ITEMS = [
   { key: 'duffle_bag',   label: 'Duffle Bag', sizeField: 'duffle_number', sizePlaceholder: '#' },
   { key: 'greens',       label: 'Greens',     sizeField: 'greens_size',   sizePlaceholder: 'Size' },
   { key: 'yellow',       label: 'Yellow',     sizeField: 'yellow_size',   sizePlaceholder: 'Size' },
+  { key: 'boots',        label: 'Boots',      sizeField: 'boots_size',   sizePlaceholder: 'Size' },
 ];
 
 // ─── Season / Date Helpers ────────────────────────────────────────────────────
