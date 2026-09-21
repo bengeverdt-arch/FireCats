@@ -22,6 +22,7 @@ const ROSTER = [
   'Zachary Kern',
   'Kolton Zimmerman',
   'Josh Collins',
+  'Noah Mires',
 ];
 
 const GEAR_ITEMS = [
