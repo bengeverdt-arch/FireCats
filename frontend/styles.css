@@ -803,7 +803,9 @@ a.link-card:hover { border-color: var(--accent); }
 /* ─── Gear Inventory ─────────────────────────────────────────────────────── */
 
 #gear-grid-wrap {
-  overflow-x: auto;
+  overflow:   auto;
+  max-height: 75vh;
+  -webkit-overflow-scrolling: touch;
 }
 
 .gear-table {
@@ -826,6 +828,11 @@ a.link-card:hover { border-color: var(--accent); }
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color:          var(--text-muted);
+  position:       sticky;
+  top:            0;
+  z-index:        2;
+  background:     var(--surface);
+  box-shadow:     inset 0 -1px 0 var(--border);
 }
 
 .gear-name-col {
@@ -834,7 +841,12 @@ a.link-card:hover { border-color: var(--accent); }
   color:       var(--text);
   position:    sticky;
   left:        0;
+  z-index:     1;
   background:  var(--surface);
+}
+
+.gear-table th.gear-name-col {
+  z-index: 3;
 }
 
 .gear-table input[type="checkbox"] {
