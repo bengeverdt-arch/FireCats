@@ -33,3 +33,11 @@ CREATE TABLE IF NOT EXISTS gear_inventory (
   boots_size     TEXT    NOT NULL DEFAULT '',
   updated_at     TEXT    DEFAULT (datetime('now'))
 );
+
+-- Free-text notes per crew member, shown in the gear inventory popup.
+-- Separate table (not a gear_inventory column) so this file stays safe to re-run on every deploy.
+CREATE TABLE IF NOT EXISTS gear_notes (
+  name       TEXT PRIMARY KEY,                           -- must match a ROSTER entry in admin.js
+  notes      TEXT NOT NULL DEFAULT '',
+  updated_at TEXT DEFAULT (datetime('now'))
+);

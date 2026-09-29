@@ -874,3 +874,48 @@ a.link-card:hover { border-color: var(--accent); }
   min-height: 1rem;
   margin-top: 0.5rem;
 }
+
+/* ─── Gear Notes ─────────────────────────────────────────────────────────── */
+
+.gear-note-btn {
+  background:  none;
+  border:      none;
+  cursor:      pointer;
+  font-size:   0.9rem;
+  margin-left: 0.4rem;
+  padding:     0.1rem 0.2rem;
+  opacity:     0.25;
+  filter:      grayscale(1);
+  vertical-align: middle;
+}
+
+.gear-note-btn:hover,
+.gear-note-btn.has-note {
+  opacity: 1;
+  filter:  none;
+}
+
+.notes-box {
+  max-width: 520px;
+}
+
+#notes-input {
+  background:    var(--surface);
+  border:        1px solid var(--border);
+  border-radius: 6px;
+  color:         var(--text);
+  font:          inherit;
+  font-size:     0.95rem;
+  padding:       0.65rem 0.75rem;
+  width:         100%;
+  resize:        vertical;
+  outline:       none;
+}
+
+#notes-input:focus {
+  border-color: var(--accent);
+}
+
+#notes-input::placeholder {
+  color: var(--text-muted);
+}

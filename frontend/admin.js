@@ -214,6 +214,7 @@ function defaultGearRow() {
     row[item.key] = false;
     if (item.sizeField) row[item.sizeField] = '';
   });
+  row.notes = '';
   return row;
 }
 
@@ -240,8 +241,16 @@ function renderGearTable() {
   ROSTER.forEach(name => {
     const tr     = document.createElement('tr');
     const nameTd = document.createElement('td');
-    nameTd.className   = 'gear-name-col';
-    nameTd.textContent = name;
+    nameTd.className = 'gear-name-col';
+    const nameSpan   = document.createElement('span');
+    nameSpan.textContent = name;
+    const noteBtn    = document.createElement('button');
+    noteBtn.type      = 'button';
+    noteBtn.className = 'gear-note-btn';
+    noteBtn.textContent = '📝';
+    noteBtn.addEventListener('click', () => openNotesModal(name, noteBtn));
+    updateNoteBtn(noteBtn, name);
+    nameTd.append(nameSpan, noteBtn);
     tr.appendChild(nameTd);
 
     GEAR_ITEMS.forEach(item => {
@@ -276,8 +285,7 @@ function renderGearTable() {
   table.appendChild(tbody);
 }
 
-function saveGearRow(name) {
-  const status = document.getElementById('gear-status');
+function saveGearRow(name, status = document.getElementById('gear-status')) {
   status.textContent = 'Saving…';
 
   clearTimeout(gearSaveTimers[name]);
@@ -317,6 +325,7 @@ async function loadGear() {
         gearState[row.name][item.key] = !!row[item.key];
         if (item.sizeField) gearState[row.name][item.sizeField] = row[item.sizeField] || '';
       });
+      gearState[row.name].notes = row.notes || '';
     });
 
     renderGearTable();
@@ -324,6 +333,53 @@ async function loadGear() {
   } catch {
     status.textContent = 'Could not load gear inventory.';
   }
+}
+
+// ─── Gear Notes ─────────────────────────────────────────────────────────────
+
+let notesTarget = null; // { name, btn } for the row whose notes are open
+
+function updateNoteBtn(btn, name) {
+  const notes = gearState[name].notes;
+  btn.classList.toggle('has-note', !!notes);
+  btn.title = notes || 'Add notes';
+  btn.setAttribute('aria-label', `Notes for ${name}`);
+}
+
+function openNotesModal(name, btn) {
+  notesTarget = { name, btn };
+  document.getElementById('notes-title').textContent = `Notes — ${name}`;
+  document.getElementById('notes-status').textContent = '';
+  const input = document.getElementById('notes-input');
+  input.value = gearState[name].notes;
+  document.getElementById('notes-modal').classList.add('open');
+  input.focus();
+}
+
+function closeNotesModal() {
+  if (!notesTarget) return;
+  updateNoteBtn(notesTarget.btn, notesTarget.name);
+  notesTarget = null;
+  document.getElementById('notes-modal').classList.remove('open');
+}
+
+function initNotesModal() {
+  const modal = document.getElementById('notes-modal');
+  const input = document.getElementById('notes-input');
+
+  input.addEventListener('input', () => {
+    if (!notesTarget) return;
+    gearState[notesTarget.name].notes = input.value;
+    saveGearRow(notesTarget.name, document.getElementById('notes-status'));
+  });
+
+  document.getElementById('notes-done').addEventListener('click', closeNotesModal);
+  modal.addEventListener('click', e => {
+    if (e.target === modal) closeNotesModal();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && modal.classList.contains('open')) closeNotesModal();
+  });
 }
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
@@ -352,6 +408,8 @@ function initAdmin() {
   pinInput.addEventListener('keydown', e => {
     if (e.key === 'Enter') tryPin();
   });
+
+  initNotesModal();
 }
 
 document.addEventListener('DOMContentLoaded', initAdmin);

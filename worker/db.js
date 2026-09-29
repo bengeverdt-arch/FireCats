@@ -65,7 +65,13 @@ const GEAR_BOOL_FIELDS = [
 const GEAR_TEXT_FIELDS = ['duffle_number', 'greens_size', 'yellow_size', 'boots_size'];
 
 export async function getAllGear(db) {
-  const result = await db.prepare('SELECT * FROM gear_inventory').all();
+  const result = await db
+    .prepare(
+      `SELECT g.*, COALESCE(n.notes, '') AS notes
+         FROM gear_inventory g
+         LEFT JOIN gear_notes n ON n.name = g.name`
+    )
+    .all();
   return result.results;
 }
 
@@ -95,6 +101,16 @@ export async function upsertGear(db, name, fields) {
       bools[8], texts[0], bools[9], texts[1], bools[10], texts[2], bools[11], texts[3]
     )
     .run();
+
+  if (typeof fields.notes === 'string') {
+    await db
+      .prepare(
+        `INSERT INTO gear_notes (name, notes, updated_at) VALUES (?, ?, datetime('now'))
+         ON CONFLICT(name) DO UPDATE SET notes=excluded.notes, updated_at=datetime('now')`
+      )
+      .bind(name, fields.notes.trim())
+      .run();
+  }
 
   return { success: true };
 }
