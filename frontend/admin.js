@@ -160,7 +160,7 @@ function renderChart(stats, season) {
     html += `
       <div class="roster-row">
         <div class="roster-name">
-          <span>${name}</span>
+          <button type="button" class="roster-name-btn" data-name="${name}">${name}</button>
           ${thisWeek[name] ? '<span class="weekend-badge">This Weekend</span>' : ''}
         </div>
         <div class="roster-bar-track">
@@ -179,6 +179,21 @@ function renderChart(stats, season) {
   }
 
   container.innerHTML = html;
+  container.querySelectorAll('.roster-name-btn').forEach(btn => {
+    btn.addEventListener('click', () => openQualsModal(btn.dataset.name));
+  });
+  refreshQualColors();
+}
+
+// Green = boots + pack test both checked, red = missing one or both
+function refreshQualColors() {
+  document.querySelectorAll('.roster-name-btn').forEach(btn => {
+    const row = gearState[btn.dataset.name];
+    if (!row) return;
+    const ready = row.boots && row.pack_test;
+    btn.classList.toggle('qual-ready',   !!ready);
+    btn.classList.toggle('qual-missing', !ready);
+  });
 }
 
 // ─── Fetch ────────────────────────────────────────────────────────────────────
@@ -215,6 +230,7 @@ function defaultGearRow() {
     if (item.sizeField) row[item.sizeField] = '';
   });
   row.notes = '';
+  row.pack_test = false;
   return row;
 }
 
@@ -261,6 +277,7 @@ function renderGearTable() {
       checkbox.addEventListener('change', () => {
         gearState[name][item.key] = checkbox.checked;
         saveGearRow(name);
+        refreshQualColors();
       });
       td.appendChild(checkbox);
 
@@ -326,6 +343,7 @@ async function loadGear() {
         if (item.sizeField) gearState[row.name][item.sizeField] = row[item.sizeField] || '';
       });
       gearState[row.name].notes = row.notes || '';
+      gearState[row.name].pack_test = !!row.pack_test;
     });
 
     renderGearTable();
@@ -382,6 +400,48 @@ function initNotesModal() {
   });
 }
 
+// ─── Boots / Pack Test Popup ────────────────────────────────────────────────
+
+let qualsTarget = null; // name whose popup is open
+
+function openQualsModal(name) {
+  if (!gearState[name]) return;
+  qualsTarget = name;
+  document.getElementById('quals-title').textContent = name;
+  document.getElementById('quals-status').textContent = '';
+  document.getElementById('qual-boots').checked     = !!gearState[name].boots;
+  document.getElementById('qual-pack-test').checked = !!gearState[name].pack_test;
+  document.getElementById('quals-modal').classList.add('open');
+}
+
+function closeQualsModal() {
+  qualsTarget = null;
+  document.getElementById('quals-modal').classList.remove('open');
+}
+
+function initQualsModal() {
+  const modal = document.getElementById('quals-modal');
+  const fields = { 'qual-boots': 'boots', 'qual-pack-test': 'pack_test' };
+
+  for (const [id, key] of Object.entries(fields)) {
+    document.getElementById(id).addEventListener('change', e => {
+      if (!qualsTarget) return;
+      gearState[qualsTarget][key] = e.target.checked;
+      saveGearRow(qualsTarget, document.getElementById('quals-status'));
+      refreshQualColors();
+      if (key === 'boots') renderGearTable(); // keep gear grid's Boots box in sync
+    });
+  }
+
+  document.getElementById('quals-done').addEventListener('click', closeQualsModal);
+  modal.addEventListener('click', e => {
+    if (e.target === modal) closeQualsModal();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && modal.classList.contains('open')) closeQualsModal();
+  });
+}
+
 // ─── Init ─────────────────────────────────────────────────────────────────────
 
 function initAdmin() {
@@ -395,8 +455,8 @@ function initAdmin() {
       pinWall.hidden       = true;
       adminContent.hidden  = false;
       pinError.textContent = '';
-      loadRosterStats();
-      loadGear();
+      // Gear first so the chart can color names by boots / pack test
+      loadGear().finally(loadRosterStats);
     } else {
       pinError.textContent = 'Incorrect PIN.';
       pinInput.value       = '';
@@ -410,6 +470,7 @@ function initAdmin() {
   });
 
   initNotesModal();
+  initQualsModal();
 }
 
 document.addEventListener('DOMContentLoaded', initAdmin);

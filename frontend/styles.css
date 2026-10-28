@@ -650,15 +650,29 @@ a.link-card:hover { border-color: var(--accent); }
 }
 
 .roster-name {
-  width:       180px;
+  width:       280px;
   flex-shrink: 0;
   font-size:   0.83rem;
   color:       var(--text);
   display:     flex;
   align-items: center;
   gap:         0.4rem;
-  flex-wrap:   wrap;
+  white-space: nowrap;
 }
+
+.roster-name-btn {
+  background: none;
+  border:     none;
+  padding:    0;
+  font:       inherit;
+  color:      inherit;
+  cursor:     pointer;
+  text-align: left;
+}
+
+.roster-name-btn:hover { text-decoration: underline; }
+.roster-name-btn.qual-ready   { color: #4caf50; }
+.roster-name-btn.qual-missing { color: #ff6b6b; }
 
 .weekend-badge {
   font-size:      0.62rem;
@@ -725,7 +739,7 @@ a.link-card:hover { border-color: var(--accent); }
 .chart-error   { font-size: 0.85rem; color: #ff7f7f; }
 
 @media (max-width: 500px) {
-  .roster-name { width: 130px; font-size: 0.78rem; }
+  .roster-name { width: 200px; font-size: 0.78rem; }
 }
 
 /* ─── Admin PIN ──────────────────────────────────────────────────────────── */
@@ -918,4 +932,24 @@ a.link-card:hover { border-color: var(--accent); }
 
 #notes-input::placeholder {
   color: var(--text-muted);
+}
+
+/* ─── Boots / Pack Test Popup ────────────────────────────────────────────── */
+
+.quals-box {
+  max-width: 320px;
+}
+
+.qual-check {
+  display:     flex;
+  align-items: center;
+  gap:         0.6rem;
+  font-size:   1rem;
+  cursor:      pointer;
+}
+
+.qual-check input {
+  width:        1.15rem;
+  height:       1.15rem;
+  accent-color: var(--accent);
 }

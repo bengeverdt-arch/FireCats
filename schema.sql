@@ -41,3 +41,11 @@ CREATE TABLE IF NOT EXISTS gear_notes (
   notes      TEXT NOT NULL DEFAULT '',
   updated_at TEXT DEFAULT (datetime('now'))
 );
+
+-- Per-person qualifications shown in the Crew Availability popup (boots reuses gear_inventory.boots).
+-- Separate table for the same re-run-safety reason as gear_notes.
+CREATE TABLE IF NOT EXISTS crew_quals (
+  name       TEXT    PRIMARY KEY,                        -- must match a ROSTER entry in admin.js
+  pack_test  INTEGER NOT NULL DEFAULT 0,
+  updated_at TEXT    DEFAULT (datetime('now'))
+);

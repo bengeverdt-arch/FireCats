@@ -67,9 +67,10 @@ const GEAR_TEXT_FIELDS = ['duffle_number', 'greens_size', 'yellow_size', 'boots_
 export async function getAllGear(db) {
   const result = await db
     .prepare(
-      `SELECT g.*, COALESCE(n.notes, '') AS notes
+      `SELECT g.*, COALESCE(n.notes, '') AS notes, COALESCE(q.pack_test, 0) AS pack_test
          FROM gear_inventory g
-         LEFT JOIN gear_notes n ON n.name = g.name`
+         LEFT JOIN gear_notes n ON n.name = g.name
+         LEFT JOIN crew_quals q ON q.name = g.name`
     )
     .all();
   return result.results;
@@ -109,6 +110,16 @@ export async function upsertGear(db, name, fields) {
          ON CONFLICT(name) DO UPDATE SET notes=excluded.notes, updated_at=datetime('now')`
       )
       .bind(name, fields.notes.trim())
+      .run();
+  }
+
+  if ('pack_test' in fields) {
+    await db
+      .prepare(
+        `INSERT INTO crew_quals (name, pack_test, updated_at) VALUES (?, ?, datetime('now'))
+         ON CONFLICT(name) DO UPDATE SET pack_test=excluded.pack_test, updated_at=datetime('now')`
+      )
+      .bind(name, fields.pack_test ? 1 : 0)
       .run();
   }
 
